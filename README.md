@@ -2,6 +2,9 @@
 [![](https://jitpack.io/v/TellH/RecyclerTreeView.svg)](https://jitpack.io/#TellH/RecyclerTreeView)</br>
 TreeView implement in Android with RecyclerView..
 
+代码是从这里copy的,作了一些改进
+https://github.com/TellH/RecyclerTreeView
+
 ## Effect
 ![](https://raw.githubusercontent.com/TellH/RecyclerTreeView/master/raw/effect.gif)
 
