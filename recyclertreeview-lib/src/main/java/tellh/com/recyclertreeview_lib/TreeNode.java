@@ -9,11 +9,13 @@ import java.util.List;
  * Created by tlh on 2016/10/1 :)
  */
 
-public class TreeNode<T extends LayoutItemType> implements Cloneable {
+public class TreeNode<T> implements Cloneable {
     private T content;
     private TreeNode parent;
     private List<TreeNode> childList;
     private boolean isExpand;
+    private boolean hasSibling;
+
     //the tree high
     private int height = UNDEFINE;
 
@@ -30,6 +32,7 @@ public class TreeNode<T extends LayoutItemType> implements Cloneable {
             height = parent.getHeight() + 1;
         return height;
     }
+
 
     public boolean isRoot() {
         return parent == null;
@@ -58,7 +61,13 @@ public class TreeNode<T extends LayoutItemType> implements Cloneable {
     public TreeNode addChild(TreeNode node) {
         if (childList == null)
             childList = new ArrayList<>();
+
+        if (!childList.isEmpty()) {
+            childList.get(childList.size() - 1).setHasSibling(true);
+        }
         childList.add(node);
+
+        node.setHasSibling(false);
         node.parent = this;
         return this;
     }
@@ -88,6 +97,14 @@ public class TreeNode<T extends LayoutItemType> implements Cloneable {
 
     public TreeNode getParent() {
         return parent;
+    }
+
+    public boolean isHasSibling() {
+        return hasSibling;
+    }
+
+    public void setHasSibling(boolean hasSibling) {
+        this.hasSibling = hasSibling;
     }
 
     @Override

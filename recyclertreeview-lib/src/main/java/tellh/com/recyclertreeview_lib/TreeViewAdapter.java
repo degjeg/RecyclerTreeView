@@ -18,17 +18,17 @@ import java.util.List;
  */
 public class TreeViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final String KEY_IS_EXPAND = "IS_EXPAND";
-    private final List<? extends TreeViewBinder> viewBinders;
+    private final TreeViewBinder viewBinders;
     private List<TreeNode> displayNodes;
     private int padding = 30;
     private OnTreeNodeListener onTreeNodeListener;
     private boolean toCollapseChild;
 
-    public TreeViewAdapter(List<? extends TreeViewBinder> viewBinders) {
+    public TreeViewAdapter(TreeViewBinder viewBinders) {
         this(null, viewBinders);
     }
 
-    public TreeViewAdapter(List<TreeNode> nodes, List<? extends TreeViewBinder> viewBinders) {
+    public TreeViewAdapter(List<TreeNode> nodes, TreeViewBinder viewBinders) {
         displayNodes = new ArrayList<>();
         if (nodes != null)
             findDisplayNodes(nodes);
@@ -50,20 +50,23 @@ public class TreeViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public int getItemViewType(int position) {
-        return displayNodes.get(position).getContent().getLayoutId();
+        return viewBinders.getItemViewType(position, displayNodes.get(position));
+        // return displayNodes.get(position).getContent().getLayoutId();
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext())
-                .inflate(viewType, parent, false);
-        if (viewBinders.size() == 1)
-            return viewBinders.get(0).provideViewHolder(v);
-        for (TreeViewBinder viewBinder : viewBinders) {
-            if (viewBinder.getLayoutId() == viewType)
-                return viewBinder.provideViewHolder(v);
-        }
-        return viewBinders.get(0).provideViewHolder(v);
+        // View v = LayoutInflater.from(parent.getContext())
+        //         .inflate(viewType, parent, false);
+        // if (viewBinders.size() == 1)
+        //     return viewBinders.get(0).provideViewHolder(v);
+        // for (TreeViewBinder viewBinder : viewBinders) {
+        //     if (viewBinder.getLayoutId() == viewType)
+        //         return viewBinder.provideViewHolder(v);
+        // }
+        // return viewBinders.get(0).provideViewHolder(v);
+
+        return viewBinders.provideViewHolder(parent.getContext(), viewType);
     }
 
     @Override
@@ -84,7 +87,7 @@ public class TreeViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
-        holder.itemView.setPadding(displayNodes.get(position).getHeight() * padding, 3, 3, 3);
+        //  holder.itemView.setPadding(displayNodes.get(position).getHeight() * padding, 3, 3, 3);
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -112,10 +115,12 @@ public class TreeViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 }
             }
         });
-        for (TreeViewBinder viewBinder : viewBinders) {
-            if (viewBinder.getLayoutId() == displayNodes.get(position).getContent().getLayoutId())
-                viewBinder.bindView(holder, position, displayNodes.get(position));
-        }
+        // for (TreeViewBinder viewBinder : viewBinders) {
+        //     if (viewBinder.getLayoutId() == displayNodes.get(position).getContent().getLayoutId())
+        //         viewBinder.bindView(holder, position, displayNodes.get(position));
+        // }
+
+        viewBinders.bindView(holder, position, displayNodes.get(position));
     }
 
     private int addChildNodes(TreeNode pNode, int startIndex) {
@@ -174,12 +179,14 @@ public class TreeViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public interface OnTreeNodeListener {
         /**
          * called when TreeNodes were clicked.
+         *
          * @return weather consume the click event.
          */
         boolean onClick(TreeNode node, RecyclerView.ViewHolder holder);
 
         /**
          * called when TreeNodes were toggle.
+         *
          * @param isExpand the status of TreeNodes after being toggled.
          */
         void onToggle(boolean isExpand, RecyclerView.ViewHolder holder);

@@ -14,8 +14,7 @@ import java.util.List;
 
 import tellh.com.recyclertreeview.bean.Dir;
 import tellh.com.recyclertreeview.bean.File;
-import tellh.com.recyclertreeview.viewbinder.DirectoryNodeBinder;
-import tellh.com.recyclertreeview.viewbinder.FileNodeBinder;
+import tellh.com.recyclertreeview.viewbinder.MyBinder;
 import tellh.com.recyclertreeview_lib.TreeNode;
 import tellh.com.recyclertreeview_lib.TreeViewAdapter;
 
@@ -67,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
                         .addChild(new TreeNode<>(new File("ic_launcher.png")))
         );
         rv.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new TreeViewAdapter(nodes, Arrays.asList(new FileNodeBinder(), new DirectoryNodeBinder()));
+        adapter = new TreeViewAdapter(nodes, new MyBinder());
         // whether collapse child nodes when their parent node was close.
 //        adapter.ifCollapseChildWhileCollapseParent(true);
         adapter.setOnTreeNodeListener(new TreeViewAdapter.OnTreeNodeListener() {
@@ -84,11 +83,11 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onToggle(boolean isExpand, RecyclerView.ViewHolder holder) {
-                DirectoryNodeBinder.ViewHolder dirViewHolder = (DirectoryNodeBinder.ViewHolder) holder;
-                final ImageView ivArrow = dirViewHolder.getIvArrow();
-                int rotateDegree = isExpand ? 90 : -90;
-                ivArrow.animate().rotationBy(rotateDegree)
-                        .start();
+                MyBinder.ViewHolderDir dirViewHolder = (MyBinder.ViewHolderDir) holder;
+                // final ImageView ivArrow = dirViewHolder.getIvArrow();
+                // int rotateDegree = isExpand ? 90 : -90;
+                // ivArrow.animate().rotationBy(rotateDegree)
+                // .start();
             }
         });
         rv.setAdapter(adapter);
