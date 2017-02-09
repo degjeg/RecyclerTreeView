@@ -6,7 +6,7 @@ TreeView implement in Android with RecyclerView..
 https://github.com/TellH/RecyclerTreeView
 
 ## Effect
-![](https://raw.githubusercontent.com/TellH/RecyclerTreeView/master/raw/effect.gif)
+![](https://github.com/degjeg/RecyclerTreeView/blob/master/raw/screen_shot.jpg)
 
 ## Usage
 ### Setup
